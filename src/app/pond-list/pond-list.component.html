@@ -1,14 +1,14 @@
-<!-- File: src/app/components/pond-list/pond-list.component.html -->
-
 <div class="container-fluid">
   <div class="card-container">
-    <div class="card pond-card" *ngFor="let pond of ponds">
+    <div class="card pond-card" *ngFor="let pond of ponds"><img src="https://images.pexels.com/photos/261088/pexels-photo-261088.jpeg?cs=srgb&dl=pexels-pixabay-261088.jpg&fm=jpg" alt="Pond Image" class="pond-image" /><!-- Add image for each pond -->
       <div class="card-body">
         <h5 class="card-title">{{ pond.name }}</h5>
         <p class="card-text">Pond ID: {{ pond.id }}</p>
-        <button class="btn btn-primary" (click)="viewSensors(pond.id)">View Sensors</button>
-        <button class="btn btn-warning" (click)="editPond(pond)">Update</button>
-        <button class="btn btn-danger" (click)="deletePond(pond.id)">Delete</button>
+        <div class="d-flex flex-column"> <!-- Change to flex-column for vertical arrangement -->
+          <button class="btn btn-primary" (click)="viewSensors(pond.id)">View Sensors</button>
+          <button class="btn btn-warning" (click)="editPond(pond)">Update</button>
+          <button class="btn btn-danger" (click)="deletePond(pond.id)">Delete</button>
+        </div>
 
         <div *ngIf="selectedPondId === pond.id && sensors.length > 0">
           <ul class="list-group mt-3">
@@ -35,8 +35,8 @@
       <input type="text" [(ngModel)]="newPond.name" placeholder="Pond Name" />
       <input type="text" [(ngModel)]="newPond.location" placeholder="Location" />
       <input type="text" [(ngModel)]="newPond.size" placeholder="Size" />
-      <button (click)="addPond()">Add Pond</button>
-      <button (click)="toggleAddPondForm()">Cancel</button>
+      <button (click)="addPond()" class="btn btn-success">Add Pond</button>
+      <button (click)="toggleAddPondForm()" class="btn btn-secondary">Cancel</button>
     </div>
   </div>
 
@@ -46,8 +46,8 @@
       <input type="text" [(ngModel)]="pondToUpdate.name" placeholder="Pond Name" />
       <input type="text" [(ngModel)]="pondToUpdate.location" placeholder="Location" />
       <input type="text" [(ngModel)]="pondToUpdate.size" placeholder="Size" />
-      <button (click)="updatePond()">Save Changes</button>
-      <button (click)="showUpdateForm = false">Cancel</button>
+      <button (click)="updatePond()" class="btn btn-success">Save Changes</button>
+      <button (click)="showUpdateForm = false" class="btn btn-secondary">Cancel</button>
     </div>
   </div>
 </div>
