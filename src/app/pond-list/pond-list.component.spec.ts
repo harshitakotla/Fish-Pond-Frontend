@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { PondManagementComponent } from '../pond-list/pond-list.component';
+import { PondListComponent } from './pond-list.component';
 
-describe('PondManagementComponent', () => {
-  let component: PondManagementComponent;
-  let fixture: ComponentFixture<PondManagementComponent>;
+describe('PondListComponent', () => {
+  let component: PondListComponent;
+  let fixture: ComponentFixture<PondListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PondManagementComponent] // Use declarations instead of imports
+      imports: [PondListComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PondManagementComponent);
+    fixture = TestBed.createComponent(PondListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

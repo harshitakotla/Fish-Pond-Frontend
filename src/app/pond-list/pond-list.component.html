@@ -4,14 +4,16 @@
   <div class="card-container">
     <!-- Pond Cards -->
     <div class="card pond-card" *ngFor="let pond of ponds">
+      <!-- Pond Image -->
       <div class="pond-image-container">
         <img src="https://amencornerponds.com/wp-content/uploads/2020/09/elaborate-ecosystem-pond-with-basins-bowl-and-waterfall.png" 
-       alt="Pond Image" class="pond-image" />
+        alt="Pond Image" class="pond-image" />
+ 
       </div>
 
       <!-- Menu Icon -->
-      <div class="menu-icon-container">
-        <i class="fas fa-ellipsis-v menu-icon" (click)="toggleOptionsVisibility(pond)"></i>
+      <div class="menu-icon-container" (click)="toggleOptionsModal(pond)" style="text-align: right; margin: 10px;">
+        <i class="fas fa-ellipsis-v menu-icon"></i>
       </div>
 
       <div class="card-body">
@@ -20,10 +22,11 @@
         <p class="card-text">Location: {{ pond.location }}</p>
         <p class="card-text">Size: {{ pond.size }}</p>
 
-        <!-- View Sensors Button -->
-        <button class="btn btn-primary view-sensors-btn" (click)="viewSensors(pond.id)">
-          View Sensors
-        </button>
+        <div class="button-group">
+          <button class="btn btn-primary" (click)="viewSensors(pond.id)">
+            <i class="fas fa-chart-line"></i> View Sensors
+          </button>
+        </div>
 
         <!-- Sensors List -->
         <div *ngIf="selectedPondId === pond.id" class="sensors-container">
@@ -47,30 +50,12 @@
     </div>
   </div>
 
-  <!-- Menu Modal (without View Sensors option) -->
-  <div *ngIf="showMenuModal" class="modal-overlay">
-    <div class="modal-content menu-modal">
-      <h3 class="modal-title">Pond Options</h3>
-      <div class="menu-options">
-        <button class="menu-option" (click)="editPond(selectedPond!)">
-          <i class="fas fa-edit"></i>
-          <span>Update</span>
-        </button>
-        <button class="menu-option delete" (click)="deletePond(selectedPond!.id)">
-          <i class="fas fa-trash"></i>
-          <span>Delete</span>
-        </button>
-      </div>
-      <button class="btn btn-secondary" (click)="closeMenuModal()">Cancel</button>
-    </div>
-  </div>
-  
-
   <!-- Add Pond Form Modal -->
   <div *ngIf="showAddPondForm" class="modal-overlay">
     <div class="modal-content">
       <h3 class="modal-title">Add New Pond</h3>
       <div class="form-group">
+        <input type="text" [(ngModel)]="newPond.id" placeholder="ID" class="form-input" />
         <input type="text" [(ngModel)]="newPond.name" placeholder="Pond Name" class="form-input" />
         <input type="text" [(ngModel)]="newPond.location" placeholder="Location" class="form-input" />
         <input type="text" [(ngModel)]="newPond.size" placeholder="Size" class="form-input" />
@@ -97,4 +82,21 @@
       </div>
     </div>
   </div>
+
+  <!-- Pond Options Modal -->
+<div *ngIf="showOptionsModal" class="modal-overlay">
+  <div class="modal-content">
+    <h3>Pond Options</h3>
+    <div class="button-group">
+      <!-- Update Button with a blue color -->
+      <button *ngIf="selectedPond" class="btn btn-primary update-btn" (click)="editPond(selectedPond)">Update</button>
+      
+      <!-- Delete Button with a red color -->
+      <button *ngIf="selectedPond" class="btn btn-danger delete-btn" (click)="deletePond(selectedPond.id)">Delete</button>
+      
+      <!-- Cancel Button with a gray color -->
+      <button class="btn btn-secondary cancel-btn" (click)="toggleOptionsModal()">Cancel</button>
+    </div>
+  </div>
 </div>
+

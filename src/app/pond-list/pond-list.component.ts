@@ -1,99 +1,89 @@
+import { Component, OnInit } from '@angular/core';
+import { PondService } from '../services/pond.service';
+import { Pond, Sensor } from '../models/pond.model';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
-interface Pond {
-  id: number;
-  name: string;
-  location: string;
-  size: string;
-}
-
-interface Sensor {
-  type: string;
-  value: string;
-}
 
 @Component({
   selector: 'app-pond-list',
-  templateUrl: './pond-list.component.html',
-  styleUrls: ['./pond-list.component.css'],
   standalone: true,
   imports: [CommonModule, FormsModule],
+  templateUrl: './pond-list.component.html',
+  styleUrls: ['./pond-list.component.css'],
 })
-export class PondManagementComponent {
-  ponds: Pond[] = [
-    { id: 1, name: 'Pond A', location: 'Location A', size: '1000 sqft' },
-    { id: 2, name: 'Pond B', location: 'Location B', size: '1500 sqft' }
-  ];
-  
-  sensors: Sensor[] = [
-    { type: 'Temperature', value: '24°C' },
-    { type: 'pH', value: '7.0' },
-    { type: 'Humidity', value: '70%' }
-  ];
-
-  selectedPondId: number | null = null;
+export class PondListComponent implements OnInit {
+  ponds: Pond[] = [];
+  sensors: Sensor[] = [];
+  selectedPondId: string | null = null;
+  newPond: Pond = { id: '', name: '', location: '', size: '', sensors: [] };
   showAddPondForm: boolean = false;
   showUpdateForm: boolean = false;
-  newPond: Pond = { id: 0, name: '', location: '', size: '' };
   pondToUpdate: Pond | null = null;
-  toggleOptions: { [key: number]: boolean } = {};
-  showMenuModal: boolean = false;
+  showOptionsModal: boolean = false;
   selectedPond: Pond | null = null;
 
-  toggleAddPondForm() {
+  constructor(private pondService: PondService) {}
+
+  ngOnInit(): void {
+    this.loadPonds();
+  }
+
+  loadPonds(): void {
+    this.pondService.getAllPonds().subscribe((data) => {
+      this.ponds = data;
+    });
+  }
+
+  viewSensors(pondId: string): void {
+    this.selectedPondId = pondId;
+    this.pondService.getSensorsByPond(pondId).subscribe((data) => {
+      this.sensors = data;
+    });
+  }
+
+  toggleOptionsModal(pond?: Pond): void {
+    this.selectedPond = pond || null;
+    this.showOptionsModal = !this.showOptionsModal;
+  }
+
+  toggleAddPondForm(): void {
     this.showAddPondForm = !this.showAddPondForm;
-    if (!this.showAddPondForm) {
-      this.newPond = { id: 0, name: '', location: '', size: '' };
+  }
+
+  addPond(): void {
+    if (this.newPond.id && this.newPond.name) {
+      this.pondService.addPond(this.newPond).subscribe((pond) => {
+        this.ponds.push(pond);
+        this.toggleAddPondForm();
+      });
+    } else {
+      alert("Please enter both Pond ID and Pond Name.");
     }
   }
 
-  addPond() {
-    if (this.newPond.name && this.newPond.location && this.newPond.size) {
-      const newId = this.ponds.length ? Math.max(...this.ponds.map(p => p.id)) + 1 : 1;
-      this.ponds.push({ ...this.newPond, id: newId });
-      this.newPond = { id: 0, name: '', location: '', size: '' };
-      this.showAddPondForm = false;
+  deletePond(pondId: string | undefined): void {
+    if (pondId && confirm('Are you sure you want to delete this pond?')) {
+      this.pondService.deletePond(pondId).subscribe(() => {
+        this.ponds = this.ponds.filter(pond => pond.id !== pondId);
+        this.showOptionsModal = false;
+      });
     }
   }
 
-  deletePond(id: number) {
-    if (confirm('Are you sure you want to delete this pond?')) {
-      this.ponds = this.ponds.filter(pond => pond.id !== id);
-      delete this.toggleOptions[id];
-      this.showMenuModal = false;
-    }
-  }
-
-  editPond(pond: Pond) {
+  editPond(pond: Pond): void {
     this.pondToUpdate = { ...pond };
     this.showUpdateForm = true;
-    this.showMenuModal = false;
+    this.showOptionsModal = false;
   }
 
-  updatePond() {
+  updatePond(): void {
     if (this.pondToUpdate) {
-      const index = this.ponds.findIndex(p => p.id === this.pondToUpdate!.id);
-      if (index > -1) {
-        this.ponds[index] = this.pondToUpdate;
-      }
-      this.showUpdateForm = false;
-      this.pondToUpdate = null;
+      this.pondService.updatePond(this.pondToUpdate).subscribe((updatedPond) => {
+        const index = this.ponds.findIndex(p => p.id === updatedPond.id);
+        if (index !== -1) this.ponds[index] = updatedPond;
+        this.showUpdateForm = false;
+        this.pondToUpdate = null;
+      });
     }
-  }
-
-  viewSensors(id: number) {
-    this.selectedPondId = this.selectedPondId === id ? null : id;
-    this.showMenuModal = false;
-  }
-
-  toggleOptionsVisibility(pond: Pond) {
-    this.selectedPond = pond;
-    this.showMenuModal = true;
-  }
-
-  closeMenuModal() {
-    this.showMenuModal = false;
   }
 }
