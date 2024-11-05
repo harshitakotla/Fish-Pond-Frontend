@@ -494,7 +494,47 @@
 .modal-buttons .btn {
   flex: 1;
 }
+.menu-options {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+  padding: 10px;
+}
 
+.menu-option {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: #2F3C7E; /* Dark Blue background */
+  color: #FBEAEB; /* Light color for text and icons */
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.menu-option i {
+  font-size: 18px;
+}
+
+.menu-option:hover {
+  background-color: #3C4D8E; /* Slightly lighter shade on hover */
+}
+
+.menu-option.delete {
+  background-color: #D9534F; /* Red background for delete */
+}
+
+.menu-option.delete:hover {
+  background-color: #C9302C; /* Darker red on hover for delete */
+}
+
+.menu-option span {
+  margin-left: 5px;
+}
 
 
 

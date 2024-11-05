@@ -8,7 +8,7 @@
         <img src="https://amencornerponds.com/wp-content/uploads/2020/09/elaborate-ecosystem-pond-with-basins-bowl-and-waterfall.png" 
        alt="Pond Image" class="pond-image" />
       </div>
-      
+
       <!-- Menu Icon -->
       <div class="menu-icon-container">
         <i class="fas fa-ellipsis-v menu-icon" (click)="toggleOptionsVisibility(pond)"></i>
@@ -19,6 +19,11 @@
         <p class="card-text">ID: {{ pond.id }}</p>
         <p class="card-text">Location: {{ pond.location }}</p>
         <p class="card-text">Size: {{ pond.size }}</p>
+
+        <!-- View Sensors Button -->
+        <button class="btn btn-primary view-sensors-btn" (click)="viewSensors(pond.id)">
+          View Sensors
+        </button>
 
         <!-- Sensors List -->
         <div *ngIf="selectedPondId === pond.id" class="sensors-container">
@@ -42,15 +47,11 @@
     </div>
   </div>
 
-  <!-- Menu Modal -->
+  <!-- Menu Modal (without View Sensors option) -->
   <div *ngIf="showMenuModal" class="modal-overlay">
     <div class="modal-content menu-modal">
       <h3 class="modal-title">Pond Options</h3>
       <div class="menu-options">
-        <button class="menu-option" (click)="viewSensors(selectedPond!.id)">
-          <i class="fas fa-chart-line"></i>
-          <span>View Sensors</span>
-        </button>
         <button class="menu-option" (click)="editPond(selectedPond!)">
           <i class="fas fa-edit"></i>
           <span>Update</span>
@@ -63,6 +64,7 @@
       <button class="btn btn-secondary" (click)="closeMenuModal()">Cancel</button>
     </div>
   </div>
+  
 
   <!-- Add Pond Form Modal -->
   <div *ngIf="showAddPondForm" class="modal-overlay">
