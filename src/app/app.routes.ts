@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { PondListComponent } from './pond-list/pond-list.component';
+import {PondManagementComponent } from './pond-list/pond-list.component';
 
 export const routes: Routes = [
-  {path:'pond',component:PondListComponent}
+  { path: 'pond', component: PondManagementComponent }
 ];

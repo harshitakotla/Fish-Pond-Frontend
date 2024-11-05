@@ -1,30 +1,24 @@
 <div class="container">
   <h1 class="main-title">Pond Management System</h1>
-  
+
   <div class="card-container">
     <!-- Pond Cards -->
     <div class="card pond-card" *ngFor="let pond of ponds">
       <div class="pond-image-container">
-        <img src="https://images.pexels.com/photos/261088/pexels-photo-261088.jpeg?cs=srgb&dl=pexels-pixabay-261088.jpg&fm=jpg" alt="Pond Image" class="pond-image" />
+        <img src="https://amencornerponds.com/wp-content/uploads/2020/09/elaborate-ecosystem-pond-with-basins-bowl-and-waterfall.png" 
+       alt="Pond Image" class="pond-image" />
       </div>
       
+      <!-- Menu Icon -->
+      <div class="menu-icon-container">
+        <i class="fas fa-ellipsis-v menu-icon" (click)="toggleOptionsVisibility(pond)"></i>
+      </div>
+
       <div class="card-body">
         <h5 class="card-title">{{ pond.name }}</h5>
         <p class="card-text">ID: {{ pond.id }}</p>
         <p class="card-text">Location: {{ pond.location }}</p>
         <p class="card-text">Size: {{ pond.size }}</p>
-        
-        <div class="button-group">
-          <button class="btn btn-primary" (click)="viewSensors(pond.id)">
-            <i class="fas fa-chart-line"></i> View Sensors
-          </button>
-          <button class="btn btn-warning" (click)="editPond(pond)">
-            <i class="fas fa-edit"></i> Update
-          </button>
-          <button class="btn btn-danger" (click)="deletePond(pond.id)">
-            <i class="fas fa-trash"></i> Delete
-          </button>
-        </div>
 
         <!-- Sensors List -->
         <div *ngIf="selectedPondId === pond.id" class="sensors-container">
@@ -45,6 +39,28 @@
         <i class="fas fa-plus-circle"></i>
         <p>Add New Pond</p>
       </div>
+    </div>
+  </div>
+
+  <!-- Menu Modal -->
+  <div *ngIf="showMenuModal" class="modal-overlay">
+    <div class="modal-content menu-modal">
+      <h3 class="modal-title">Pond Options</h3>
+      <div class="menu-options">
+        <button class="menu-option" (click)="viewSensors(selectedPond!.id)">
+          <i class="fas fa-chart-line"></i>
+          <span>View Sensors</span>
+        </button>
+        <button class="menu-option" (click)="editPond(selectedPond!)">
+          <i class="fas fa-edit"></i>
+          <span>Update</span>
+        </button>
+        <button class="menu-option delete" (click)="deletePond(selectedPond!.id)">
+          <i class="fas fa-trash"></i>
+          <span>Delete</span>
+        </button>
+      </div>
+      <button class="btn btn-secondary" (click)="closeMenuModal()">Cancel</button>
     </div>
   </div>
 
